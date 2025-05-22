@@ -1,10 +1,12 @@
 import express from 'express';
 import db from './config/mysql/mysql.js';
+import OriginRouter from './modules/origin/routes/origin.route.js';
 
 class Server {
     constructor() {
         this.app = express();
         this.port = process.env.PORT;
+        this.origin_path = '/api/v1/origin';
 
         this.connectDB();
         this.middlewares();
@@ -23,6 +25,7 @@ class Server {
 
     middlewares() {
         this.app.use(express.json());
+        this.app.use(this.origin_path, OriginRouter);
     }
 
     routes() {
