@@ -63,14 +63,10 @@ class OriginController extends BaseController {
                     details: error.details.map(d => d.message)
                 });
             }
-
-            if (req.body.origen && req.body.origen !== existingOrigin.ORIGEN) {
-                const exists = await Origin.exists(this.getDbPool(), req.body.origen);
-                if (exists) {
-                    return res.status(400).json({ message: "Ya existe un origen con este nombre" });
-                }
-            }
-            const updatedOrigin = new Origin(id, req.body.origen || existingOrigin.ORIGEN);
+            const exists = await Origin.exists(this.getDbPool(), id, req.body.origen);
+            if (exists) return res.status(400).json({ message: "Ya existe un origen con este nombre" });
+            
+            const updatedOrigin = new Origin(id, req.body.origen);
             const result = await updatedOrigin.update(this.getDbPool());
 
             if (result.affectedRows === 0) return res.sendStatus(204);

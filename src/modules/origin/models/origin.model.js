@@ -68,10 +68,10 @@ class Origin extends ModelBase {
         return result;
     }
 
-    static async exists(conexion, origen) {
+    static async exists(conexion, idExists, origen) {
         const [result] = await conexion.query(
-            "SELECT COUNT(*) AS count FROM ORIGENES WHERE ORIGEN = ? AND deleted_at IS NULL",
-            [origen]
+            "SELECT COUNT(*) AS count FROM ORIGENES WHERE ORIGEN = ? AND ID != ? AND deleted_at IS NULL",
+            [origen, idExists]
         );
         return result[0].count > 0;
     }
